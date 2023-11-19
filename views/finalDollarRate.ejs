@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Final Dollar Rates</title>
+   <link rel="stylesheet" type="text/css" href="/view.css">
+</head>
+<body>
+   <h1>Final Dollar Rates</h1>
+   <table class="tabili">
+       <tr>
+           <th>Currency</th>
+           <th>Final Rate (USD * User's Rate)</th>
+       </tr>
+       <% for (const currency in finalDollarRate) { %>
+           <tr>
+               <td><%= currency %></td>
+               <td><%= finalDollarRate[currency] %></td>
+           </tr>
+       <% } %>
+   </table>
+
+   <form action="/dashboard/finalconvert" method="post">
+    <button class="btn" type="submit">Proceed</button>
+</body>
+</html>

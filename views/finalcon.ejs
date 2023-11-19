@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Initial Conversion Results</title>
+    <link rel="stylesheet" href="/viewcon.css">
+</head>
+<body>
+    <h1>Initial Conversion Results</h1>
+    <p>Selected Currency: <span class="spank"><%= selectedCurrency %></span></p>
+    <p>Converted Amount: <span class="spank"><%= convertedAmount %></span></p>
+
+    <h2>Initial Converted Amounts:</h2>
+    <ul>
+        <% for (const currency in initialConvertedResults) { %>
+            <li><%= currency %>: <%= initialConvertedResults[currency] %></li>
+        <% } %>
+    </ul>
+
+    <form method="get" action="/user/dashboard/dollarRates">
+        <h2>Enter the Dollar Rate (USD to NGN):</h2>
+        <input type="number" step="0.01" name="dollarRate" required>
+
+       
+
+        <input type="hidden" name="convertedAmount" value="<%= convertedAmount %>">
+        <input type="submit" value="Calculate Final Conversion">
+    </form>
+
+    <script>
+        const currencySelect = document.getElementById('currencySelect');
+        const customRatesDiv = document.getElementById('customRates');
+        const selectedCurrenciesList = document.querySelector('#selectedCurrencies ul');
+        const selectedCurrencies = []; // Array to store selected currencies
+
+        currencySelect.addEventListener('change', updateSelectedCurrencies);
+
+        function updateSelectedCurrencies() {
+            const selectedOptions = Array.from(currencySelect.selectedOptions);
+
+            // Loop through selected options and process each currency
+            selectedOptions.forEach(option => {
+                const currency = option.value;
+
+                // Check if the currency is not already in the array
+                if (!selectedCurrencies.includes(currency)) {
+                    selectedCurrencies.push(currency);
+
+                    // Add the selected currency to the list
+                    const listItem = document.createElement('li');
+                    listItem.textContent = currency;
+                    selectedCurrenciesList.appendChild(listItem);
+
+                    // Add custom rate input field for the selected currency
+                    const customRateInput = document.createElement('div');
+                    customRateInput.innerHTML = `
+                        <label for="${currency}">Custom Rate for ${currency}:</label>
+                        <input type="number" step="0.01" name="customConversionRates[${currency}]" required><br>
+                    `;
+                    customRatesDiv.appendChild(customRateInput);
+                } else {
+                    alert(`Currency "${currency}" is already selected.`);
+                }
+
+                if (selectedCurrencies.length >= 50) {
+                    alert('You can select a maximum of 50 currencies.');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
